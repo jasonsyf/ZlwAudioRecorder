@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @author zhaolewei on 2018/8/17.
  */
-public class AudioView extends View {
+public class AudioView2 extends View {
 
     /**
      * 频谱数量
@@ -30,7 +30,7 @@ public class AudioView extends View {
     private static final int LUMP_SIZE = LUMP_WIDTH + LUMP_SPACE;
     private static final int LUMP_COLOR = Color.parseColor("#6de8fd");
 
-    private static final int WAVE_SAMPLING_INTERVAL = 5;
+    private static final int WAVE_SAMPLING_INTERVAL = 3;
 
     private static final float SCALE = LUMP_MAX_HEIGHT / 32;
 
@@ -45,17 +45,17 @@ public class AudioView extends View {
     Path wavePathDown = new Path();
 
 
-    public AudioView(Context context) {
+    public AudioView2(Context context) {
         super(context);
         init();
     }
 
-    public AudioView(Context context, @Nullable AttributeSet attrs) {
+    public AudioView2(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public AudioView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public AudioView2(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -241,23 +241,7 @@ public class AudioView extends View {
         pointList.add(new Point(LUMP_SIZE * LUMP_COUNT, 0));
     }
 
-    private void genSamplingMirroPoint(byte[] data) {
-        if (upShowStyle != ShowStyle.STYLE_WAVE && downShowStyle != ShowStyle.STYLE_WAVE && upShowStyle != ShowStyle.STYLE_ALL && downShowStyle != ShowStyle.STYLE_ALL) {
-            return;
-        }
-        if (pointList == null) {
-            pointList = new ArrayList<>();
-        } else {
-            pointList.clear();
-        }
 
-        pointList.add(new Point(LUMP_SIZE * LUMP_COUNT, 0));
-        for (int i = LUMP_COUNT-1; i >= WAVE_SAMPLING_INTERVAL; i -= WAVE_SAMPLING_INTERVAL) {
-            pointList.add(new Point(LUMP_SIZE * i, waveData[i]));
-        }
-        pointList.add(new Point(0, 0));
-
-    }
 
 
     /**

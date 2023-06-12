@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     RadioGroup tbEncoding;
     @BindView(R.id.audioView)
     AudioView audioView;
+    @BindView(R.id.audioView1)
+    AudioView2 audioView1;
     @BindView(R.id.spUpStyle)
     Spinner spUpStyle;
     @BindView(R.id.spDownStyle)
@@ -214,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onFftData(byte[] data) {
                 audioView.setWaveData(data);
+                audioView1.setWaveData(data);
             }
         });
     }
@@ -264,9 +267,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         switch (parent.getId()) {
             case R.id.spUpStyle:
                 audioView.setStyle(AudioView.ShowStyle.getStyle(STYLE_DATA[position]), audioView.getDownStyle());
+                audioView1.setStyle(AudioView2.ShowStyle.getStyle(STYLE_DATA[position]), audioView1.getDownStyle());
                 break;
             case R.id.spDownStyle:
                 audioView.setStyle(audioView.getUpStyle(), AudioView.ShowStyle.getStyle(STYLE_DATA[position]));
+                audioView1.setStyle(audioView1.getUpStyle(), AudioView2.ShowStyle.getStyle(STYLE_DATA[position]));
                 break;
             default:
                 break;
