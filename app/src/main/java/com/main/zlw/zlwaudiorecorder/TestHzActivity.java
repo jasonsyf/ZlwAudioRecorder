@@ -3,7 +3,6 @@ package com.main.zlw.zlwaudiorecorder;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,38 +13,31 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.main.zlw.zlwaudiorecorder.base.MyApp;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
-import com.zlw.loggerlib.Logger;
 import com.zlw.main.recorderlib.RecordManager;
 import com.zlw.main.recorderlib.recorder.RecordConfig;
 import com.zlw.main.recorderlib.recorder.RecordHelper;
 import com.zlw.main.recorderlib.recorder.listener.RecordFftDataListener;
 import com.zlw.main.recorderlib.recorder.listener.RecordResultListener;
 import com.zlw.main.recorderlib.recorder.listener.RecordStateListener;
+import com.zlw.main.recorderlib.utils.Logger;
 
 import java.io.File;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class TestHzActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class TestHzActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,View.OnClickListener {
     private static final String TAG = TestHzActivity.class.getSimpleName();
 
-    @BindView(R.id.btRecord)
     Button btRecord;
-    @BindView(R.id.btStop)
     Button btStop;
-    @BindView(R.id.tvState)
     TextView tvState;
-    @BindView(R.id.audioView)
     AudioView audioView;
-    @BindView(R.id.spUpStyle)
     Spinner spUpStyle;
-    @BindView(R.id.spDownStyle)
     Spinner spDownStyle;
 
     private boolean isStart = false;
@@ -57,11 +49,18 @@ public class TestHzActivity extends AppCompatActivity implements AdapterView.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        btRecord= (Button) findViewById(R.id.btRecord);
+        btStop = (Button) findViewById(R.id.btStop);
+        tvState = (TextView) findViewById(R.id.tvState);
+        audioView = (AudioView) findViewById(R.id.audioView);
+        spUpStyle  = (Spinner) findViewById(R.id.spUpStyle);
+        spDownStyle = (Spinner) findViewById(R.id.spDownStyle);
+        btRecord.setOnClickListener(this);
+        btStop.setOnClickListener(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         setContentView(R.layout.activity_hz);
-        ButterKnife.bind(this);
         initPermission();
         initAudioView();
     }
@@ -155,8 +154,28 @@ public class TestHzActivity extends AppCompatActivity implements AdapterView.OnI
         });
     }
 
-    @OnClick({R.id.btRecord, R.id.btStop})
-    public void onViewClicked(View view) {
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (parent.getId()) {
+            case R.id.spUpStyle:
+                audioView.setStyle(AudioView.ShowStyle.getStyle(STYLE_DATA[position]), audioView.getDownStyle());
+                break;
+            case R.id.spDownStyle:
+                audioView.setStyle(audioView.getUpStyle(), AudioView.ShowStyle.getStyle(STYLE_DATA[position]));
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btRecord:
                 if (isStart) {
@@ -184,24 +203,5 @@ public class TestHzActivity extends AppCompatActivity implements AdapterView.OnI
             default:
                 break;
         }
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()) {
-            case R.id.spUpStyle:
-                audioView.setStyle(AudioView.ShowStyle.getStyle(STYLE_DATA[position]), audioView.getDownStyle());
-                break;
-            case R.id.spDownStyle:
-                audioView.setStyle(audioView.getUpStyle(), AudioView.ShowStyle.getStyle(STYLE_DATA[position]));
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }
